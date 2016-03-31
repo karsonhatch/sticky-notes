@@ -1,0 +1,91 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta charset="utf-8" />
+ <script src="https://fb.me/react-0.14.7.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.5/react.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.5/react-dom.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+ <link rel='stylesheet' href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css" />
+ </head>
+ <body>
+   <div id='content' class='container'>
+   </div>
+   <script type='text/babel'>
+   class Board extends React.Component {
+   		constructor(props){
+   			super(props);
+   			this.state = { notes: [], complete: 0, nextID: 0}
+   			this.addNote = this.addNote.bind(this)
+   			this.notes = this.notes.bind(this)
+   			this.deleteNote = this.deleteNote.bind(this)
+   			this.editNote = this.editNote.bind(this)
+   		}
+ 			
+ 			addNote(e) {
+ 				e.preventDefault();
+ 				let notes = this.state.notes;
+					notes.push ({
+						name: this.refs.name.value,
+						id: this.state.nextID
+					});
+				this.refs.name.value = null;
+        this.setState({ notes: notes, nextID: this.nextID(this.state.nextID) });
+ 			}
+
+ 			nextID(id) {
+         return id += 1;
+       }
+
+ 			deleteNote(id) {
+ 				let noteArray = this.state.notes;
+ 				let index = noteArray.findIndex( x => x.id === id );
+ 			}
+
+ 			notes() {
+ 				let notes = [];
+ 				this.state.notes.map( note => { 
+ 					notes.push(<div className="col s12 m6">
+	                         <div className="card blue">
+	                           <div className="card-content white-text">
+	                             <span className="card-title">{note.name}</span>
+	                           </div>
+	                           <div className="card-action">
+	                             <a href="#">This is a link</a>
+	                             <a href="#">This is a link</a>
+	                           </div>
+	                         </div>
+	                       </div>
+				);
+ 				});
+ 				return notes;
+
+ 			}
+
+
+ 			editNote() {
+
+ 			}
+
+   		render(){
+	   		return(
+	           <div className="center">
+	             <h1>NotePad</h1>
+	             <form onSubmit={this.addNote}>
+	               <input id='name' placeholder="add note" type="text" ref="name" />
+	             </form>
+	             <div className="row">
+	               {this.notes()}
+	             </div>
+	           </div>
+	         );
+   	}
+   }
+   ReactDOM.render(<Board />, document.getElementById('content'));
+   </script>
+  </body>
+</head>
